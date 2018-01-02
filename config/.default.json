@@ -1,0 +1,9 @@
+{
+  "mattermost": {
+    "host": "http://localhost:8065",
+    "apiToken": "xxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "redash": {
+    "apiKey": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+  }
+}
