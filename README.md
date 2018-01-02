@@ -2,17 +2,19 @@
 
 [Redash](https://redash.io) integrations for Mattermost
 
+![Screenshot](https://raw.githubusercontent.com/kaakaa/matter-redash/images/matter-redash.gif)
+
 ## Configure
 
 ### Matter-Redash
 
 `Matter-Redash` needs [Mattermost Personal Access Token](https://docs.mattermost.com/developer/personal-access-tokens.html) and [Redash API Key](http://help.redash.io/article/128-api-key-authentication).
 
-[config/.default.json](https://github.com/kaakaa/matter-redash/blob/master/config/.default.json)
+And writing it in [config/.default.json](https://github.com/kaakaa/matter-redash/blob/master/config/.default.json).
 
 ### Mattermost Custom Slash Commands
 
-Create [**Custom Slash Command**]([Slash Commands — Mattermost 4\.5 documentation](https://docs.mattermost.com/developer/slash-commands.html#custom-slash-command)) for `matter-redash`.
+Create [**Custom Slash Command**](https://docs.mattermost.com/developer/slash-commands.html#custom-slash-command) for `matter-redash`.
 
 * Title: `redash`
 * TriggerWord: `redash`
