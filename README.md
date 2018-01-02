@@ -20,7 +20,6 @@ Create [**Custom Slash Command**](https://docs.mattermost.com/developer/slash-co
 * TriggerWord: `redash`
 * RequestURL: `http://${matter-redash}:8888/redash`
 
-
 ## Run Server
 
 ```
@@ -40,6 +39,11 @@ Post on Mattermost
 
 **Redash URL must follow the format below**  
 `http://${REDASH_HOST}/queries/${QUERY_ID}/source#{VISUALIZATION_ID}`
+
+## Caution
+
+On the specification of Mattermost, `Matter-Redash` created a temporary post to obtain the public link of the image file uploaded to the mattermost.
+`Matter-Redash` deleted that post after obtaining the public link, but the message "post deleted" has been left.
 
 ## LISENCE
 
