@@ -2,6 +2,8 @@
 
 [Redash](https://redash.io) integrations for Mattermost
 
+![screenshot](https://raw.githubusercontent.com/kaakaa/matter-redash/images/matter-redash.gif)
+
 ## Configure
 
 `Matter-Redash` needs Mattermost API Token and Redash API Key.
