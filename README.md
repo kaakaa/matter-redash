@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/kaakaa/matter-meeting.svg?branch=master)](https://travis-ci.org/kaakaa/matter-meeting)
+[![Build Status](https://travis-ci.org/kaakaa/matter-redash.svg?branch=master)](https://travis-ci.org/kaakaa/matter-redash)
 
 # Matter-Redash
 
