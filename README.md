@@ -14,7 +14,14 @@
 
 And writing it in [config/.default.json](https://github.com/kaakaa/matter-redash/blob/master/config/.default.json).
 
-### Mattermost Custom Slash Commands
+### Mattermost Configurations
+
+Since `Matter-Redash` uses `Personal Access Token` and `Public Link` of Mattermost, you must enable that options form `System Console`.
+
+* [Enable Personal Access Tokens](https://docs.mattermost.com/administration/config-settings.html#enable-personal-access-tokens)
+* [Enable Public Links](https://docs.mattermost.com/administration/config-settings.html#public-links)
+
+### Mattermost Custom Slash Command
 
 Create [**Custom Slash Command**](https://docs.mattermost.com/developer/slash-commands.html#custom-slash-command) for `matter-redash`.
 
