@@ -17,6 +17,6 @@ server.listen(8888, (err) => {
     if (err) {
         console.error(err); // eslint-disable-line no-console
     } else {
-        console.log('%s listening', server.name,); // eslint-disable-line no-console
+        console.log('%s listening', server.name); // eslint-disable-line no-console
     }
 });
