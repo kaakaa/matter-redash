@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/kaakaa/matter-meeting.svg?branch=master)](https://travis-ci.org/kaakaa/matter-meeting)
+
 # Matter-Redash
 
 [Redash](https://redash.io) integrations for Mattermost
