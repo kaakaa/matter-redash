@@ -6,73 +6,76 @@ const MattermostClient4 = require('mattermost-redux/client/client4.js');
 const fs = require('fs');
 const util = require('util');
 const FormData = require('form-data');
-const config = require('config');
 const webshot = require('./webshot');
 
-// redash query URL specified as argument of slash commands.
-// This URL follows `http(s)://${redash_host}/queries/${query_id}/source#${visualization_id}`
-const re = /(http[s]?):\/\/([^\/]+)\/queries\/([0-9]+)\/source#([0-9]+)/g; // eslint-disable-line no-useless-escape
 
-const client = new MattermostClient4.default(); // eslint-disable-line new-cap
-client.setUrl(config.mattermost.host);
-client.setToken(config.mattermost.apiToken);
+module.exports = class Mattermost {
+    constructor (url, token) {
+        this.client = new MattermostClient4.default(); // eslint-disable-line new-cap
+        this.client.setUrl(url);
+        this.client.setToken(token);
 
-const redashCommand = async (req, res) => {
-    // Parse arguments
-    const url = req.body.text;
-    const array = re.exec(url);
-    if (!array) {
-        res.send('Arguments is invalid. Please specify redash query URL of the following form. `http(s)://{redash_host}/queries/{query_id}/source#{visualization_id}`');
-        return;
+        // redash query URL specified as argument of slash commands.
+        // This URL follows `http(s)://${redash_host}/queries/${query_id}/source#${visualization_id}`
+        this.re = /(http[s]?):\/\/([^\/]+)\/queries\/([0-9]+)\/source#([0-9]+)/g; // eslint-disable-line no-useless-escape
     }
+    async uploadFile(channel_id, text, redashApiKey){
+        const embedUrl = this.parseURL(text, redashApiKey);
+        console.log('Redash Embed URL: %s', embedUrl); // eslint-disable-line no-console
+        const file = await webshot(embedUrl);
 
-    // Take a webshot of redash
-    const protocol = array[1];
-    const redashHost = array[2];
-    const queryId = array[3];
-    const visualizationId = array[4];
+        // Upload webshot image file
+        const imageFormData = new FormData();
+        imageFormData.append('files', fs.createReadStream(file));
+        imageFormData.append('channel_id', channel_id);
 
-    const embedUrl = util.format('%s://%s/embed/query/%d/visualization/%d?api_key=%s', protocol, redashHost, queryId, visualizationId, config.redash.apiKey);
-    console.log('Redash Embed URL: %s', embedUrl); // eslint-disable-line no-console
-    const file = await webshot(embedUrl);
+        return await this.client.uploadFile(imageFormData, imageFormData.getBoundary());
+    }
+    async getFilePublicLink(channel_id, file_id){
+        // Get public link of uploaded file
+        const post = await this.client.createPost({
+            channel_id: channel_id,
+            message: 'This message is posted solely to get the public link and should be deleted immediately.',
+            file_ids: [file_id]
+        });
+        const link = await this.client.getFilePublicLink(file_id);
+        console.log('Public Link URL: %s', link.link); // eslint-disable-line no-console
+        return { post_id: post.id, public_link: link.link};
+    }
+    async deletePost(post_id) {
+        this.client.deletePost(post_id);
+    }
+    parseURL(url, apiKey) {
+        const array = this.re.exec(url);
+        if (!array) {
+            throw new Error('Arguments is invalid. Please specify redash query URL of the following form. `http(s)://{redash_host}/queries/{query_id}/source#{visualization_id}`');
+        }
 
-    // Upload webshot image file
-    const imageFormData = new FormData();
-    imageFormData.append('files', fs.createReadStream(file));
-    imageFormData.append('channel_id', req.body.channel_id);
+        // Take a webshot of redash
+        const protocol = array[1];
+        const redashHost = array[2];
+        const queryId = array[3];
+        const visualizationId = array[4];
 
-    const uploadFile = await client.uploadFile(imageFormData, imageFormData.getBoundary());
-
-    // Get public link of uploaded file
-    const fileId = uploadFile.file_infos[0].id;
-    const post = await client.createPost({
-        channel_id: req.body.channel_id,
-        message: 'This message is posted solely to get the public link and should be deleted immediately.',
-        file_ids: [fileId]
-    });
-    const link = await client.getFilePublicLink(fileId);
-    console.log('Mattermost Public Link: %s', link.link); // eslint-disable-line no-console
-
-    // Response to Mattermost
-    res.header({'content-type': 'application/json'});
-    res.send(commandResponse(url, link.link));
-
-    // Delete unnecessary post.
-    client.deletePost(post.id);
-};
-
-const commandResponse = (query, fileLink) => {
-    return {
-        response_type: 'in_channel',
-        attachments: [
-            {
-                color: '#88ff00',
-                pretext: '## Matter-Redash',
-                text: util.format('**This image file can be downloaded from [here](%s). #matter-redash\n**Original Url is %s', fileLink, query),
-                image_url: fileLink
-            }
-        ]
+        return util.format('%s://%s/embed/query/%d/visualization/%d?api_key=%s', protocol, redashHost, queryId, visualizationId, apiKey);
+    }
+    async makeCommandResponse(query, fileLink) {
+        return {
+            response_type: 'in_channel',
+            attachments: [
+                {
+                    color: '#88ff00',
+                    pretext: '## Matter-Redash',
+                    text: util.format('**This image file can be downloaded from [here](%s). #matter-redash\n**Original Url is %s', fileLink, query),
+                    image_url: fileLink
+                }
+            ]
+        };
     };
-};
-
-module.exports = redashCommand;
+    async makeErrorResponse(err) {
+        return {
+            response_type: 'ephemeral',
+            text: "Matter-Redash Error: " + err
+        }
+    }
+}
