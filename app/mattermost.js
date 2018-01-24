@@ -46,6 +46,9 @@ module.exports = class Mattermost {
         this.client.deletePost(post_id);
     }
     parseURL(url, apiKey) {
+        if (apiKey.length == 0) {
+            throw new Error('Redash API Key is not found. Please write Redash API Key in config file.');
+        }
         const array = this.re.exec(url);
         if (!array) {
             throw new Error('Arguments is invalid. Please specify redash query URL of the following form. `http(s)://{redash_host}/queries/{query_id}/source#{visualization_id}`');
