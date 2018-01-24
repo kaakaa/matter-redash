@@ -1,4 +1,4 @@
-// These "requires" is needed by mattermost-redux
+// These 'requires' is needed by mattermost-redux
 require('babel-polyfill');
 require('isomorphic-fetch');
 const MattermostClient4 = require('mattermost-redux/client/client4.js');
@@ -8,9 +8,8 @@ const util = require('util');
 const FormData = require('form-data');
 const webshot = require('./webshot');
 
-
 module.exports = class Mattermost {
-    constructor (url, token) {
+    constructor(url, token) {
         this.client = new MattermostClient4.default(); // eslint-disable-line new-cap
         this.client.setUrl(url);
         this.client.setToken(token);
@@ -19,7 +18,7 @@ module.exports = class Mattermost {
         // This URL follows `http(s)://${redash_host}/queries/${query_id}/source#${visualization_id}`
         this.re = /(http[s]?):\/\/([^\/]+)\/queries\/([0-9]+)\/source#([0-9]+)/g; // eslint-disable-line no-useless-escape
     }
-    async uploadFile(channel_id, text, redashApiKey){
+    async uploadFile(channelId, text, redashApiKey) {
         const embedUrl = this.parseURL(text, redashApiKey);
         console.log('Redash Embed URL: %s', embedUrl); // eslint-disable-line no-console
         const file = await webshot(embedUrl);
@@ -27,26 +26,26 @@ module.exports = class Mattermost {
         // Upload webshot image file
         const imageFormData = new FormData();
         imageFormData.append('files', fs.createReadStream(file));
-        imageFormData.append('channel_id', channel_id);
+        imageFormData.append('channel_id', channelId);
 
-        return await this.client.uploadFile(imageFormData, imageFormData.getBoundary());
+        return this.client.uploadFile(imageFormData, imageFormData.getBoundary());
     }
-    async getFilePublicLink(channel_id, file_id){
+    async getFilePublicLink(channelId, fileId) {
         // Get public link of uploaded file
         const post = await this.client.createPost({
-            channel_id: channel_id,
+            channel_id: channelId,
             message: 'This message is posted solely to get the public link and should be deleted immediately.',
-            file_ids: [file_id]
+            file_ids: [fileId]
         });
-        const link = await this.client.getFilePublicLink(file_id);
+        const link = await this.client.getFilePublicLink(fileId);
         console.log('Public Link URL: %s', link.link); // eslint-disable-line no-console
-        return { post_id: post.id, public_link: link.link};
+        return {post_d: post.id, public_link: link.link};
     }
-    async deletePost(post_id) {
-        this.client.deletePost(post_id);
+    async deletePost(postId) {
+        this.client.deletePost(postId);
     }
     parseURL(url, apiKey) {
-        if (apiKey.length == 0) {
+        if (apiKey.length === 0) {
             throw new Error('Redash API Key is not found. Please write Redash API Key in config file.');
         }
         const array = this.re.exec(url);
@@ -74,11 +73,11 @@ module.exports = class Mattermost {
                 }
             ]
         };
-    };
+    }
     async makeErrorResponse(err) {
         return {
             response_type: 'ephemeral',
-            text: "Matter-Redash Error: " + err
-        }
+            text: 'Matter-Redash Error: ' + err
+        };
     }
-}
+};
