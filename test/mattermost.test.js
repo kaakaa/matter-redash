@@ -72,3 +72,30 @@ describe('testin parseURL', () => {
         assert.throws(() => mm.parseURL(url, apiKey), Error);
     });
 });
+
+describe('testing makeCommandResponse', () => {
+    it('input valid arguments', async () => {
+        const mm = new Mattermost('localhost', 'test_token');
+        const query = 'http://redash/queries/1/source#2';
+        const fileLink = 'http://mattermost/publiclink';
+
+        const actual = await mm.makeCommandResponse(query, fileLink);
+
+        assert.equal(actual.response_type, 'in_channel');
+        assert.include(actual.attachments[0].text, query);
+        assert.include(actual.attachments[0].text, fileLink);
+        assert.include(actual.attachments[0].image_url, fileLink);
+    });
+});
+
+describe('testing makeErrorResponse', () => {
+    it('input valid arguments', async () => {
+        const mm = new Mattermost('localhost', 'test_token');
+        const err = new Error('test error');
+
+        const actual = await mm.makeErrorResponse(err);
+
+        assert.equal(actual.response_type, 'ephemeral');
+        assert.include(actual.text, err.message);
+    });
+});
