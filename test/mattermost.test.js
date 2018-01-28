@@ -7,9 +7,15 @@ const sinon = require('sinon');
 const Mattermost = require('../app/mattermost');
 
 const mmClientStub = {
-    setUrl(arg){},
-    setToken(arg){},
-    deletePost(arg1){}
+    setUrl(arg1) {
+        console.debug('stubbing `setUrl` with ' + arg1); // eslint-disable-line no-console
+    },
+    setToken(arg1) {
+        console.debug('stubbing `setToken` with ' + arg1); // eslint-disable-line no-console
+    },
+    deletePost(arg1) {
+        console.debug('stubbing `deletePost` with ' + arg1); // eslint-disable-line no-console
+    }
 };
 
 describe('testing deletePost', () => {
@@ -21,7 +27,7 @@ describe('testing deletePost', () => {
     it('input valid args', async () => {
         const postId = 'post_id';
 
-        const expected = {stub: true, message: 'Deletin post is success.'}
+        const expected = {stub: true, message: 'Deletin post is success.'};
         const stub = sinon.stub(mmClientStub, 'deletePost');
         stub.returns(expected);
 
