@@ -35,7 +35,7 @@ module.exports = class Mattermost {
         });
         const link = await this.client.getFilePublicLink(fileId);
         console.log('Public Link URL: %s', link.link); // eslint-disable-line no-console
-        return {post_d: post.id, public_link: link.link};
+        return {post_id: post.id, public_link: link.link};
     }
     async deletePost(postId) {
         return this.client.deletePost(postId);

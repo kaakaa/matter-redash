@@ -13,10 +13,41 @@ const mmClientStub = {
     setToken(arg1) {
         console.debug('stubbing `setToken` with ' + arg1); // eslint-disable-line no-console
     },
+    createPost(arg1, arg2, arg3) {
+        console.debug('stubbing `createPost` with ' + arg1 + ', ' + arg2 + ", " + arg3); // eslint-disable-line no-console
+    },
+    getFilePublicLink(arg1) {
+        console.debug('stubbing `getFilePublicLink` with ' + arg1); // eslint-disable-line no-console        
+    },
     deletePost(arg1) {
         console.debug('stubbing `deletePost` with ' + arg1); // eslint-disable-line no-console
     }
 };
+
+describe('testing getFilePublicLink', () => {
+    let mm;
+    beforeEach((done) => {
+        mm = new Mattermost(mmClientStub, 'localhost', 'test_token');
+        done();
+    });
+    it('input valid args', async () => {
+        const channelId = 'channel_id';
+        const fileId = 'file_id';
+
+        const expectedPostId = 'sample_post_id';
+        const createPostStub = sinon.stub(mmClientStub, 'createPost');
+        createPostStub.returns({id: expectedPostId});
+
+        const expectedLink = 'http://mattermost/publicLink/sample';
+        const getFilePublicLinkStub = sinon.stub(mmClientStub, 'getFilePublicLink');
+        getFilePublicLinkStub.returns({link: expectedLink});
+
+        const actual = await mm.getFilePublicLink(channelId, fileId);
+
+        assert.equal(actual.post_id, expectedPostId);
+        assert.equal(actual.public_link, expectedLink);
+    });
+});
 
 describe('testing deletePost', () => {
     let mm;
