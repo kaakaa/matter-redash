@@ -7,3 +7,4 @@ cache: yarn
 
 script:
 - "yarn run check"
+- "yarn run test"
