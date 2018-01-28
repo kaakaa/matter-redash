@@ -13,16 +13,50 @@ const mmClientStub = {
     setToken(arg1) {
         console.debug('stubbing `setToken` with ' + arg1); // eslint-disable-line no-console
     },
+    uploadFile(arg1, arg2) {
+        console.debug('stubbing `uploadFile` with ' + arg1 + ', ' + arg2); // eslint-disable-line no-console
+    },
     createPost(arg1, arg2, arg3) {
-        console.debug('stubbing `createPost` with ' + arg1 + ', ' + arg2 + ", " + arg3); // eslint-disable-line no-console
+        console.debug('stubbing `createPost` with ' + arg1 + ', ' + arg2 + ', ' + arg3); // eslint-disable-line no-console
     },
     getFilePublicLink(arg1) {
-        console.debug('stubbing `getFilePublicLink` with ' + arg1); // eslint-disable-line no-console        
+        console.debug('stubbing `getFilePublicLink` with ' + arg1); // eslint-disable-line no-console
     },
     deletePost(arg1) {
         console.debug('stubbing `deletePost` with ' + arg1); // eslint-disable-line no-console
     }
 };
+
+describe('testing uploadFile', () => {
+    let mm;
+    beforeEach((done) => {
+        mm = new Mattermost(mmClientStub, 'localhost', 'test_token');
+        done();
+    });
+    it('input valid args', async () => {
+        const channelId = 'sample_channel_id';
+        const text = 'http://localhost:5000/queries/1/source#2';
+        const apiKey = 'sample_api_key';
+        const webshot = (arg1) => {
+            return 'webshot_image with ' + arg1;
+        };
+
+        const makeImageFormStub = sinon.stub(mm, 'makeImageFormData');
+        makeImageFormStub.returns({
+            getBoundary() {
+                return 'stub';
+            }
+        });
+
+        const expected = {stub: true, message: 'Uploading file is success.'};
+        const uploadFileStub = sinon.stub(mmClientStub, 'uploadFile');
+        uploadFileStub.returns(expected);
+
+        const actual = await mm.uploadFile(channelId, text, apiKey, webshot);
+
+        assert.equal(actual, expected);
+    });
+});
 
 describe('testing getFilePublicLink', () => {
     let mm;

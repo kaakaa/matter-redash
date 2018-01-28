@@ -2,7 +2,6 @@
 const fs = require('fs');
 const util = require('util');
 const FormData = require('form-data');
-const webshot = require('./webshot');
 
 module.exports = class Mattermost {
     constructor(client, url, token) {
@@ -14,17 +13,20 @@ module.exports = class Mattermost {
         // This URL follows `http(s)://${redash_host}/queries/${query_id}/source#${visualization_id}`
         this.re = /(http[s]?):\/\/([^\/]+)\/queries\/([0-9]+)\/source#([0-9]+)/g; // eslint-disable-line no-useless-escape
     }
-    async uploadFile(channelId, text, redashApiKey) {
+    async uploadFile(channelId, text, redashApiKey, webshot) {
         const embedUrl = this.parseURL(text, redashApiKey);
         console.log('Redash Embed URL: %s', embedUrl); // eslint-disable-line no-console
         const file = await webshot(embedUrl);
 
         // Upload webshot image file
+        const formData = await this.makeImageFormData(file, channelId);
+        return this.client.uploadFile(formData, formData.getBoundary());
+    }
+    async makeImageFormData(file, channelId) {
         const imageFormData = new FormData();
         imageFormData.append('files', fs.createReadStream(file));
         imageFormData.append('channel_id', channelId);
-
-        return this.client.uploadFile(imageFormData, imageFormData.getBoundary());
+        return imageFormData;
     }
     async getFilePublicLink(channelId, fileId) {
         // Get public link of uploaded file
