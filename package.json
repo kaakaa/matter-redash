@@ -15,14 +15,18 @@
     "isomorphic-fetch": "^2.2.1",
     "mattermost-redux": "^1.1.0",
     "puppeteer": "^0.13.0",
+    "sinon": "^4.2.2",
     "tempfile": "^2.0.0"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.14.0",
-    "eslint-plugin-node": "^5.2.1"
+    "eslint-plugin-node": "^5.2.1",
+    "mocha": "^5.0.0"
   },
   "scripts": {
     "check": "eslint --ignore-pattern node_modules --quiet .",
+    "test": "mocha",
     "server": "node index.js"
   }
 }
