@@ -1,3 +1,8 @@
+// These 'requires' is needed by mattermost-redux
+require('babel-polyfill');
+require('isomorphic-fetch');
+const MattermostClient4 = require('mattermost-redux/client/client4.js');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('config');
@@ -16,7 +21,7 @@ server.use(bodyParser.json());
 
 server.get('/ping', pong);
 server.post('/redash', async (req, res) => {
-    const mm = new Mattermost(config.mattermost.host, config.mattermost.apiToken);
+    const mm = new Mattermost(MattermostClient4.default(), config.mattermost.host, config.mattermost.apiToken);
     let resp;
     let postId;
     try {

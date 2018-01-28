@@ -1,7 +1,3 @@
-// These 'requires' is needed by mattermost-redux
-require('babel-polyfill');
-require('isomorphic-fetch');
-const MattermostClient4 = require('mattermost-redux/client/client4.js');
 
 const fs = require('fs');
 const util = require('util');
@@ -9,8 +5,8 @@ const FormData = require('form-data');
 const webshot = require('./webshot');
 
 module.exports = class Mattermost {
-    constructor(url, token) {
-        this.client = new MattermostClient4.default(); // eslint-disable-line new-cap
+    constructor(client, url, token) {
+        this.client = client;
         this.client.setUrl(url);
         this.client.setToken(token);
 
