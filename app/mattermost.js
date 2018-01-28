@@ -38,7 +38,7 @@ module.exports = class Mattermost {
         return {post_d: post.id, public_link: link.link};
     }
     async deletePost(postId) {
-        this.client.deletePost(postId);
+        return this.client.deletePost(postId);
     }
     parseURL(url, apiKey) {
         if (apiKey.length === 0) {

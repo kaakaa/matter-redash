@@ -2,16 +2,32 @@
 /*eslint max-nested-callbacks: ["error", 3]*/
 /*eslint no-undef: 2*/
 const assert = require('chai').assert; // eslint-disable-line node/no-unpublished-require
+const sinon = require('sinon');
 
 const Mattermost = require('../app/mattermost');
 
 const mmClientStub = {
-    setUrl(arg) {},
-    setToken(arg) {}
+    setUrl(arg){},
+    setToken(arg){},
+    deletePost(arg1){}
 };
 
-describe('testing uploadFile', () => {
+describe('testing deletePost', () => {
+    let mm;
+    beforeEach((done) => {
+        mm = new Mattermost(mmClientStub, 'localhost', 'test_token');
+        done();
+    });
+    it('input valid args', async () => {
+        const postId = 'post_id';
 
+        const expected = {stub: true, message: 'Deletin post is success.'}
+        const stub = sinon.stub(mmClientStub, 'deletePost');
+        stub.returns(expected);
+
+        const actual = await mm.deletePost(postId);
+        assert.equal(actual, expected);
+    });
 });
 
 describe('testing parseURL', () => {
