@@ -2,7 +2,7 @@
 /*eslint max-nested-callbacks: ["error", 3]*/
 /*eslint no-undef: 2*/
 const assert = require('chai').assert; // eslint-disable-line node/no-unpublished-require
-const sinon = require('sinon');
+const sinon = require('sinon'); // eslint-disable-line node/no-unpublished-require
 
 const Mattermost = require('../app/mattermost');
 
