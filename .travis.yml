@@ -5,6 +5,9 @@ node_js:
 
 cache: yarn
 
+install:
+- "yarn add -D codecov"
+
 script:
 - "yarn run check"
-- "yarn run test"
+- "yarn run codecov"
