@@ -22,7 +22,7 @@ server.use(bodyParser.json());
 
 server.get('/ping', pong);
 server.post('/redash', async (req, res) => {
-    const mm = new Mattermost(MattermostClient4.default(), config.mattermost.host, config.mattermost.apiToken);
+    const mm = new Mattermost(new MattermostClient4.default(), config.mattermost.host, config.mattermost.apiToken);
     let resp;
     let postId;
     try {
