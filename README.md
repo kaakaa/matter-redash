@@ -32,6 +32,21 @@ Create [**Custom Slash Command**](https://docs.mattermost.com/developer/slash-co
 
 ## Run Server
 
+### Docker
+
+```
+cp config/.default.json config/default.json
+vi config/default.json
+
+docker build -t matter-redash .
+docker run \
+  --rm \
+  -p 8888:8888 \
+  -v ${PWD}/config/default.json:/usr/local/src/config/default.json \
+  kaakaa/matter-redash
+```
+
+### Command Line
 ```
 cp config/.default.json config/default.json
 vi config/default.json
