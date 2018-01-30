@@ -22,7 +22,8 @@ server.use(bodyParser.json());
 
 server.get('/ping', pong);
 server.post('/redash', async (req, res) => {
-    const mm = new Mattermost(new MattermostClient4.default(), config.mattermost.host, config.mattermost.apiToken);
+    const client4 = new MattermostClient4.default(); // eslint-disable-line new-cap
+    const mm = new Mattermost(client4, config.mattermost.host, config.mattermost.apiToken);
     let resp;
     let postId;
     try {
