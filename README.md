@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/kaakaa/matter-redash.svg?branch=master)](https://travis-ci.org/kaakaa/matter-redash)
 [![codecov](https://codecov.io/gh/kaakaa/matter-redash/branch/master/graph/badge.svg)](https://codecov.io/gh/kaakaa/matter-redash)
+[![](https://images.microbadger.com/badges/image/kaakaa/matter-redash.svg)](https://microbadger.com/images/kaakaa/matter-redash "Get your own image badge on microbadger.com")
 
 # Matter-Redash
 
