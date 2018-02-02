@@ -17,8 +17,8 @@ RUN apt-get update && apt-get install -y wget --no-install-recommends \
 # Setting up for matter-redash
 WORKDIR /usr/local/src
 ADD . /usr/local/src
-RUN yarn config set proxy $http_proxy \
-  && yarn config set https-proxy $https_proxy
+# RUN yarn config set proxy $http_proxy \
+#   && yarn config set https-proxy $https_proxy
 RUN yarn install
 
 # Setting up for puppeteer user
