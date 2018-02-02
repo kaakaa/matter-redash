@@ -1,2 +1,5 @@
 node_modules/
 config/default.json
+.nyc_output/
+coverage.lcov
+yarn-error.log

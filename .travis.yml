@@ -10,4 +10,4 @@ install:
 
 script:
 - "yarn run check"
-- "yarn run codecov"
+- "yarn run coverage"
